@@ -1,0 +1,110 @@
+<!-- 이미 완성되어 있는 html파일입니다. 이해를 돕기위한 주석이 약간 있으나 넘기셔도 무방합니다. -->
+<!DOCTYPE html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Management</title>
+</head>
+<body>
+    <h1>User Management</h1>
+
+    <!-- POST 요청을 보내기 위한 form, submit 수행 시 HTML 스크립트만으로 POST요청을 보낼 수 있다.-->
+    <h2>Create a User</h2>
+    <form id="createUserForm" action="/user" method="POST">
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" required><br>
+
+        <label for="id">ID:</label>
+        <input type="text" id="id" name="id" required><br>
+
+        <input type="submit" value="Create User">
+    </form>
+
+    <!-- GET 요청을 보내기 위한 form, user로 부터 입력 및 submit만 받고 axios를 이용 해 GET요청을 한다.-->
+    <h2>Get User Data</h2>
+    <form id="getUserForm">
+        <label for="timestamp">Timestamp:</label>
+        <input type="text" id="timestamp" required><br>
+        <input type="submit" value="Get User Data">
+    </form>
+
+    <div id="userData">
+        <!-- 이곳에 읽어온 데이터가 위치하게 될 예정입니다. -->
+    </div>
+
+    <!-- DELETE 요청을 보내기 위한 form, 위와 같다.-->
+    <h2>Delete User</h2>
+    <form id="deleteUserForm">
+        <label for="deleteTimestamp">Timestamp:</label>
+        <input type="text" id="deleteTimestamp" required><br>
+        <input type="submit" value="Delete User">
+    </form>
+
+    <!-- axios를 이용하기 위해 JS외부 라이브러리를 가져온다.-->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script>
+        // Id를 이용해 엘리먼트를 읽어온다.
+        const getUserForm = document.getElementById('getUserForm');
+        const userData = document.getElementById('userData');
+
+        // 이벤트 리스너를 활용 해 submit 이벤트 발생 시 다음과 같은 동작을 수행한다.
+        getUserForm.addEventListener('submit', async (e) => {
+            // 이벤트 리스너가 실행되는 동안 form의 기본동작을 중지시킨다.
+            e.preventDefault();
+            // timestamp라는 id를 가진 엘리먼트의 값을 읽어온다.
+            const timestamp = document.getElementById('timestamp').value;
+
+            // HTTP 요청을 보내는 부분
+            try {
+                // GET요청을 보낸다. 이 때 쿼리 문자열을 활용 해 timestamp의 정보를 전달한다.
+                // key와 값이 =으로 구분되므로 서버단에서 파싱하여 데이터를 파악할 것이다. (여러분의 몫입니다.)
+                const response = await axios.get(`/user?timestamp=${timestamp}`);
+                // GET요청의 결과로 받은 res msg의 상태코드가 200이라면
+                if (response.status === 200) {
+                    // 데이터만 변수에 따로 담아
+                    const user = response.data;
+                    // userData 엘리먼트의 콘텐츠를 수정한다.
+                    userData.innerHTML = `Name: ${user.name}, ID: ${user.id}`;
+                }
+                // 에러 발생 시
+            } catch (error) {
+                // userData 엘리먼트의 콘텐츠를 수정한 후
+                userData.innerHTML = '';
+                // alert로 에러 발생을 알린다.
+                alert('User data not found or an error occurred.');
+            }
+        });
+
+        // Id를 이용해 엘리먼트를 읽어온다.
+        const deleteUserForm = document.getElementById('deleteUserForm');
+        // 위와 마찬가지로 이벤트 리스너를 활용한다.
+        deleteUserForm.addEventListener('submit', async (e) => {
+            // 위와 같다.
+            e.preventDefault();
+            // Id를 이용해 엘리먼트를 읽어온다.
+            const deleteTimestamp = document.getElementById('deleteTimestamp').value;
+
+            // HTTP 요청(DELETE)를 보내는 부분
+            try {
+                // DELETE요청을 보내되 url을 /user로 한다.
+                const response = await axios.delete('/user', {
+                    // 또한 데이터를 보낸다. 형식은 문자열, 데이터는 form에 입력되어 있는 timestamp
+                    data: deleteTimestamp,
+                    headers: {
+                        'Content-Type': 'text/plain',
+                    },
+                });
+                // DELETE요청의 결과로 받은 res msg의 상태코드가 200이라면
+                if (response.status === 200) {
+                    // alert를 활용 해 제대로 삭제되었음을 알린다.
+                    alert('User deleted successfully.');
+                }
+                // 에러 발생 시
+            } catch (error) {
+                // alert로 에러 발생을 알린다.
+                alert('User data not found or an error occurred.');
+            }
+        });
+    </script>
+</body>
+</html>

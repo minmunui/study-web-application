@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="kr">
+<head>
+  <meta charset="UTF-8">
+  <title>4주차 웹응용프로그래밍</title>
+  <style>
+      .myButton {
+          background-color: #3498db;
+          color: #fff;
+          padding: 10px 20px;
+          border: none;
+          cursor: pointer;
+      }
+
+      .myButton:hover {
+          background-color: #2980b9;
+      }
+
+      .myButton2 {
+          background-color: #e74c3c;
+          color: #fff;
+          padding: 10px 20px;
+          border: none;
+          cursor: pointer;
+      }
+
+      .myButton2:hover {
+          background-color: #c0392b;
+      }
+
+      .myButton3 {
+          background-color: #a33ce7;
+          color: #fff;
+          padding: 10px 20px;
+          border: none;
+          cursor: pointer;
+      }
+
+      .myButton3:hover {
+          background-color: #d400ff;
+      }
+
+      #myspan {
+          font-family: 'Times New Roman', Times, serif;
+          font-size: 24px;
+          font-weight: bold;
+      }
+  </style>
+  <script>
+
+      let timers = {
+          iframe1: {
+              object: null,
+              timer: 0,
+              interval : null,
+              isActive: false
+          }
+          ,
+          iframe2: {
+              object: null,
+              timer: 0,
+              interval : null,
+              isActive: false
+          }
+      }
+
+      function openNewWindow() {
+          /* TODO : 새 창 열기, window 객체 활용하기 */
+          window.open("https://www.google.com/", "_blank", "")
+      }
+
+      function change() {
+          const clickMe = document.getElementById("myspan")
+          /* TODO : 클릭 시 style 변경 시키기, DOM객체 불러오기 활용 */
+          clickMe.style.color = "purple"
+          clickMe.style.fontWeight = "bold"
+          clickMe.style.backgroundColor = "yellow"
+          console.log(clickMe)
+      }
+
+      function createTag() {
+          /* TODO : 클릭 시 element 생성하기, 엘리먼트 생성하기 활용*/
+          const divElement = document.createElement("div")
+          const parentDiv = document.getElementById("first")
+          divElement.innerHTML = "안녕하세요!"
+          divElement.style.cursor = "pointer"
+          divElement.style.backgroundColor = "magenta"
+          divElement.onclick = function () {
+              parentDiv.removeChild(this)
+          }
+          parentDiv.appendChild(divElement)
+      }
+
+      function loadURL(iframeid, buttonid) {
+          const iframe = document.getElementById(iframeid).contentWindow
+          const button = document.getElementById(buttonid)
+          const url = document.getElementById("input1").value
+          try {
+              const newWindow = iframe.open(url, "_self", "")
+          } catch (e) {
+              alert("CORS 오류입니다!")
+              return
+          }
+          timers[iframeid].isActive = true
+          timers[iframeid].object = setTimeout(function () {
+              newWindow.close()
+          }, 5000)
+          timers[iframeid].timer = 5
+          button.innerHTML = `타이머${iframeid[iframeid.length - 1]} 취소 (${timers[iframeid].timer})`
+          timers[iframeid].interval = setInterval(function () {
+              if (timers[iframeid].isActive) {
+                  timers[iframeid].timer -= 1
+                  button.innerHTML = `타이머${iframeid[iframeid.length - 1]} 취소 (${timers[iframeid].timer})`
+              }
+              if (timers[iframeid].timer === 0) {
+                  timers[iframeid].isActive = false
+                  clearInterval(timers[iframeid].interval)
+                  button.innerHTML = `타이머${iframeid[iframeid.length - 1]} 취소`
+              }
+          }, 1000)
+      }
+
+      function cancelTimer(cancelButton) {
+          switch (cancelButton.id) {
+              case "timercancel1" : {
+                  clearTimeout(timers[0].object)
+                  cancelButton.innerHTML = `타이머1 취소`
+                  break
+              }
+              case "timercancel2" : {
+                  clearTimeout(timers[1].object)
+                  cancelButton.innerHTML = `타이머2 취소`
+                  break
+              }
+              default : {
+                  console.log("invalid button id")
+              }
+          }
+      }
+  </script>
+</head>
+<body>
+<div id="first">
+  <button class="myButton" onclick="change()">style 변경!</button>
+  <button class="myButton" onclick="createTag()">엘리먼트 생성!</button>
+  <p><span id="myspan" style="color:blue" onclick="openNewWindow()">나를 클릭하세요</span></p>
+</div>
+<div id="second">
+  <br>
+  <!-- TODO 엘리먼트 만들기 -->
+  <input type="text" id="input1" placeholder="URL 입력">
+  <button class="myButton" onclick="loadURL('iframe1','timercancel1')">URL 로드1</button>
+  <button class="myButton2" onclick="loadURL('iframe2','timercancel2')">URL 로드2</button>
+  <button id="timercancel1" class="myButton3" onclick="cancelTimer(this)">타이머1 취소</button>
+  <button id="timercancel2" class="myButton3" onclick="cancelTimer(this)">타이머2 취소</button>
+  <br>
+  <iframe id="iframe1" width="800" height="600"></iframe>
+  <iframe id="iframe2" width="800" height="600"></iframe>
+</div>
+</body>
+</html>

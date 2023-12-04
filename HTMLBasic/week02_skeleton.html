@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="kr">
+<head>
+  <meta charset="UTF-8">
+  <title>웹응용프로그래밍 2주차</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+      .normal {
+          background-color: yellowgreen;
+      }
+
+      thead th {
+          font-weight: normal;
+      }
+
+      table, th, td {
+          border: 1px solid black;
+          border-collapse: collapse;
+      }
+
+      strong {
+          font-weight: bold;
+      }
+
+      a > strong {
+          font-weight: normal;
+          background-color: yellow;
+      }
+
+      a.normal {
+          text-decoration: none;
+      }
+  </style>
+</head>
+<body>
+<p class="normal">좋은 오후 되세요!</p>
+<p>만약 네가 오후 네 시에 온다면, <strong>난 세 시부터 행복해지기 시작할거야!</strong>
+<table>
+  <thead>
+  <tr>
+    <th>네이버</th>
+    <th>구글</th>
+    <th>w3school</th>
+  </thead>
+  <tbody>
+  <tr>
+    <td><a href="https://www.naver.com/" class="normal" target="_blank">열기</a></td>
+    <td><a href="https://www.google.co.kr/?hl=ko"><strong>열기</strong></a></td>
+    <td><a href="https://www.w3schools.com/">열기</a></td>
+  </tr>
+</table>
+</body>
+</html>

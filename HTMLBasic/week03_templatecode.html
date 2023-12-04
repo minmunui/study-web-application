@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>웹응용프로그래밍 3주차</title>
+  <style>
+      .button {
+          background-color: #007BFF;
+          color: #FFFFFF;
+          padding: 10px 20px;
+          border: none;
+          border-radius: 5px;
+          cursor: pointer;
+          margin: 5px;
+      }
+
+      .button:hover {
+          background-color: #0056b3;
+      }
+  </style>
+  <script>
+      /* TODO */
+      const functionA = () => {
+          const now = new Date();
+          const minutes = now.getMinutes();
+          const seconds = now.getSeconds();
+          const answer = prompt(`현재 시간에서 '분'과 '초'를 더하세요 (${minutes} + ${seconds} = ?)`);
+          if (answer === null) {
+              return
+              // 아무 일도 일어나지 않음
+          } else if (parseInt(answer) === minutes + seconds) {
+              alert("맞았습니다!")
+          } else {
+              alert("틀렸습니다!")
+          }
+      }
+
+      const account = {
+          name: "???",
+          value: -100
+      }
+
+      const functionB = () => {
+          const userName = prompt("예금주를 입력하세요")
+          if (userName === null) {
+              account.name = "???"
+          } else {
+              account.name = userName;
+          }
+          const value = parseInt(prompt("잔액을 입력하세요"));
+          if (isNaN(value)) {
+              account.value = -100;
+          } else {
+              account.value = value;
+          }
+      }
+
+      const functionC = () => {
+          alert(`${account.name}님의 계좌 잔액은 ${account.value}원 입니다.`)
+          // alert(``+ console.log("injected code") +`님의 계좌 잔액은 ${account.value}원 입니다.`)
+      }
+  </script>
+</head>
+<body>
+<button class="button"
+        onclick="functionA()"
+>A 버튼
+</button>
+<button class="button"
+        onclick="functionB()"
+>B 버튼
+</button>
+<button class="button"
+        onclick="functionC()"
+>C 버튼
+</button>
+</body>
+</html>

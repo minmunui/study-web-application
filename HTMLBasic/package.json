@@ -1,0 +1,7 @@
+{
+  "name": "HTMLBasic",
+  "version": "1.0.0",
+  "dependencies": {
+    "console": "^0.7.2"
+  }
+}
